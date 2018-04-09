@@ -1,0 +1,27 @@
+{
+  "name": "bugfixes_endpoint_create",
+  "version": "0.0.1",
+  "description": "BugFixes Create Endpoint",
+  "main": "index.js",
+  "author": "keloran <keloran@bugfix.es>",
+  "license": "MIT",
+  "scripts": {
+    "test": "yarn test:standard && yarn test:endpoint",
+    "test:standard": "standard *.js --recursive",
+    "test:endpoint": "jasmine test.js",
+    "claudia:create": "claudia create --name account-create --region eu-west-2 --runtime nodejs8.10 --handler index.handler",
+    "claudia:test": "claudia test-lambda",
+    "claudia:deploy": "claudia update --runtime nodejs8.10 "
+  },
+  "dependencies": {
+    "bugfixes": "^1.5.0",
+    "bugfixes-account-logging": "^0.0.1",
+    "bugfixes-account-models": "^0.0.1"
+  },
+  "devDependencies": {
+    "claudia": "^3.4.1",
+    "dotenv": "^5.0.1",
+    "jasmine": "^3.1.0",
+    "standard": "^11.0.1"
+  }
+}

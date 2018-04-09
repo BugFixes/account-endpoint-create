@@ -1,0 +1,7 @@
+{
+  "lambda": {
+    "role": "account-create-executor",
+    "name": "account-create",
+    "region": "eu-west-2"
+  }
+}
