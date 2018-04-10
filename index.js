@@ -8,33 +8,31 @@ exports.handler = function (event, context, callback) {
   let eventBody = JSON.parse(event.body)
 
   let account = new AccountModel()
-  account.accoutName = eventBody.name
+  account.name = eventBody.name
   account.email = eventBody.email
   account.cellphone = eventBody.cellphone
-  account.countryCode = eventBody.country
+  account.countryCode = eventBody.countryCode
 
   let log = new Logs()
   log.action = 'Create Account'
   log.content = {
     apiKey: event.requestContext.identity.apiKey,
-    name: event.body.name,
-    email: event.body.email
+    name: eventBody.name,
+    email: eventBody.email
   }
+
   account.save((error, result) => {
     if (error) {
+      bugfixes.error('Create Error', error)
+
       log.content.error = error
-
       log.send()
-      bugfunctions.error('Create Error', error)
 
-      return callback(error)
+      callback(error)
     }
 
     log.send()
 
-    return callback(null, {
-      code: 100,
-      message: result
-    })
+    callback(null, bugfunctions.lambdaResult(100, result))
   })
 }

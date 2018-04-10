@@ -1,82 +1,79 @@
-/* global it, beforeEach, describe, expect, jasmine */
+/* global it, describe */
 require('dotenv').config()
+
+const expect = require('chai').expect
 
 const underTest = require('./index')
 
 const payLoad = {
-  "body": "{\"name\":\"KeloranTest\",\"email\":\"keloran+test@bugfix.es\",\"cellphone\":7515674596,\"country\":44}",
-  "resource": "/{proxy+}",
+  "resource": "/account",
+  "path": "/v1/account",
+  "httpMethod": "POST",
+  "headers": {
+    "CloudFront-Forwarded-Proto": "https",
+    "CloudFront-Is-Desktop-Viewer": "true",
+    "CloudFront-Is-Mobile-Viewer": "false",
+    "CloudFront-Is-SmartTV-Viewer": "false",
+    "CloudFront-Is-Tablet-Viewer": "false",
+    "CloudFront-Viewer-Country": "GB",
+    "Content-Type": "application/json; charset=utf-8",
+    "Host": "account.bugfix.es",
+    "User-Agent": "Paw/3.1.5 (Macintosh; OS X/10.13.4) GCDHTTPRequest",
+    "Via": "1.1 823355654d69efaf19d467269c43b83a.cloudfront.net (CloudFront)",
+    "X-Amz-Cf-Id": "vdr-ndAQGr6glTbrjgFPP67dH7YJ4F5EZW-YwM_cFIOAKNF-aTeXkQ==",
+    "X-Amzn-Trace-Id": "Root=1-5acb82f6-58d4bf48609b48804f96551c",
+    "X-API-KEY": "FqeFIjvhgi3etnvwWmpsj64SRNmf11rM99Ve369R",
+    "X-Forwarded-For": "37.157.242.120, 54.240.156.47",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https"
+  },
+  "queryStringParameters": null,
+  "pathParameters": null,
+  "stageVariables": null,
   "requestContext": {
-    "resourceId": "123456",
-    "apiId": "1234567890",
-    "resourcePath": "/{proxy+}",
+    "resourceId": "db8q1j",
+    "resourcePath": "/account",
     "httpMethod": "POST",
-    "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
-    "accountId": "123456789012",
+    "extendedRequestId": "FFFmjH7YrPEFt_g=",
+    "requestTime": "09/Apr/2018:15:12:54 +0000",
+    "path": "/v1/account",
+    "accountId": "369633732598",
+    "protocol": "HTTP/1.1",
+    "stage": "Live_v1",
+    "requestTimeEpoch": 1523286774745,
+    "requestId": "7a7ff09f-3c08-11e8-957a-a3725751a011",
     "identity": {
-      "apiKey": null,
-      "userArn": null,
-      "cognitoAuthenticationType": null,
-      "caller": null,
-      "userAgent": "Custom User Agent String",
-      "user": null,
       "cognitoIdentityPoolId": null,
       "cognitoIdentityId": null,
+      "apiKey": "FqeFIjvhgi3etnvwWmpsj64SRNmf11rM99Ve369R",
+      "cognitoAuthenticationType": null,
+      "userArn": null,
+      "apiKeyId": "jtiqpzjpl0",
+      "userAgent": "Paw/3.1.5 (Macintosh; OS X/10.13.4) GCDHTTPRequest",
+      "accountId": null,
+      "caller": null,
+      "sourceIp": "37.157.242.120",
+      "accessKey": null,
       "cognitoAuthenticationProvider": null,
-      "sourceIp": "127.0.0.1",
-      "accountId": null
+      "user": null
     },
-    "stage": "prod"
+    "apiId": "437o1c2113"
   },
-  "queryStringParameters": {
-    "foo": "bar"
-  },
-  "headers": {
-    "Via": "1.1 08f323deadbeefa7af34d5feb414ce27.cloudfront.net (CloudFront)",
-    "Accept-Language": "en-US,en;q=0.8",
-    "CloudFront-Is-Desktop-Viewer": "true",
-    "CloudFront-Is-SmartTV-Viewer": "false",
-    "CloudFront-Is-Mobile-Viewer": "false",
-    "X-Forwarded-For": "127.0.0.1, 127.0.0.2",
-    "CloudFront-Viewer-Country": "US",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-    "Upgrade-Insecure-Requests": "1",
-    "X-Forwarded-Port": "443",
-    "Host": "1234567890.execute-api.us-east-1.amazonaws.com",
-    "X-Forwarded-Proto": "https",
-    "X-Amz-Cf-Id": "cDehVQoZnx43VYQb9j2-nvCh-9z396Uhbp027Y2JvkCPNLmGJHqlaA==",
-    "CloudFront-Is-Tablet-Viewer": "false",
-    "Cache-Control": "max-age=0",
-    "User-Agent": "Custom User Agent String",
-    "CloudFront-Forwarded-Proto": "https",
-    "Accept-Encoding": "gzip, deflate, sdch"
-  },
-  "pathParameters": {
-    "proxy": "/account"
-  },
-  "httpMethod": "POST",
-  "stageVariables": {
-    "baz": "qux"
-  },
-  "path": "/account"
+  "body": "{\"name\":\"Keloran\",\"email\":\"keloran@bugfix.es\",\"cellphone\":7515674596,\"countryCode\":44}",
+  "isBase64Encoded": false
 }
 
 process.env.AUTHY_URL = 'http://docker.devel:9000/protected/json'
 process.env.AWS_DYNAMO_ENDPOINT = 'https://docker.devel:8000'
 
 describe('Account Create Endpoint', () => {
-  let lambdaContextSpy
-
-  beforeEach(() => {
-    lambdaContextSpy = jasmine.createSpyObj('lambdaContext', ['done'])
-  })
-
   it('should create account', (done) => {
-    underTest.handler(payLoad, 'test', (error, result) => {
+    underTest.handler(payLoad, console, (error, result) => {
       if (error) {
-        expect(result).to.be.an('object')
-        lambdaContextSpy.done()
+        done(Error(error))
       }
+
+      done()
     })
   })
 })
