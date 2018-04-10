@@ -1,10 +1,11 @@
 {
-  "name": "bugfixes_endpoint_create",
+  "name": "bugfixes-endpoint-create",
   "version": "0.0.1",
   "description": "BugFixes Create Endpoint",
   "main": "index.js",
   "author": "keloran <keloran@bugfix.es>",
   "license": "MIT",
+  "repository": "git@github.com:BugFixes/account-endpoint-create.git",
   "scripts": {
     "test": "yarn test:standard && yarn test:endpoint",
     "test:standard": "standard index.js --recursive",
