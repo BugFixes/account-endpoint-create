@@ -1,6 +1,6 @@
 {
   "name": "bugfixes-endpoint-create",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "BugFixes Create Endpoint",
   "main": "index.js",
   "author": "keloran <keloran@bugfix.es>",
@@ -24,6 +24,7 @@
     "claudia": "^3.4.1",
     "dotenv": "^5.0.1",
     "mocha": "^5.0.5",
+    "mockyeah": "^0.16.2",
     "standard": "^11.0.1"
   }
 }

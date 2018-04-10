@@ -4,14 +4,8 @@ const Logs = require('bugfixes-account-logging')
 
 const bugfunctions = bugfixes.functions
 
-exports.handler = function (event, context, callback) {
+function lambdaFunction (event, context, callback) {
   let eventBody = JSON.parse(event.body)
-
-  let account = new AccountModel()
-  account.name = eventBody.name
-  account.email = eventBody.email
-  account.cellphone = eventBody.cellphone
-  account.countryCode = eventBody.countryCode
 
   let log = new Logs()
   log.action = 'Create Account'
@@ -21,6 +15,11 @@ exports.handler = function (event, context, callback) {
     email: eventBody.email
   }
 
+  let account = new AccountModel()
+  account.name = eventBody.name
+  account.email = eventBody.email
+  account.cellphone = eventBody.cellphone
+  account.countryCode = eventBody.countryCode
   account.save((error, result) => {
     if (error) {
       bugfixes.error('Create Error', error)
@@ -28,11 +27,13 @@ exports.handler = function (event, context, callback) {
       log.content.error = error
       log.send()
 
-      callback(error)
+      return callback(error)
     }
-
     log.send()
 
-    callback(null, bugfunctions.lambdaResult(100, result))
+    return callback(null, bugfunctions.lambdaResult(100, result))
   })
 }
+
+module.exports = lambdaFunction
+exports.handler = lambdaFunction

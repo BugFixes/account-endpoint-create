@@ -1,9 +1,11 @@
-/* global it, describe */
+/* global it, describe, before, after */
 require('dotenv').config()
-
-const expect = require('chai').expect
+const bugfixes = require('bugfixes')
+const mockyeah = require('mockyeah')
 
 const underTest = require('./index')
+
+const expect = require('chai').expect
 
 const payLoad = {
   "resource": "/account",
@@ -63,15 +65,39 @@ const payLoad = {
   "isBase64Encoded": false
 }
 
-process.env.AUTHY_URL = 'http://docker.devel:9000/protected/json'
-process.env.AWS_DYNAMO_ENDPOINT = 'https://docker.devel:8000'
+process.env.AUTHY_URL = 'http://127.0.0.1:4001/protected/json'
+process.env.AWS_DYNAMO_ENDPOINT = 'http ://docker.devel:8000'
 
 describe('Account Create Endpoint', () => {
+  before(() => {
+    mockyeah.post('/protected/json/users/new', {
+      json: {
+        message: 'User Created',
+        user: {
+          id: process.env.TEST_ACCOUNT_ID
+        },
+        success: true
+      }
+    })
+  })
+
+  after(() => {
+    mockyeah.close()
+  })
+
   it('should create account', (done) => {
-    underTest.handler(payLoad, console, (error, result) => {
+    underTest(payLoad, console, (error, result) => {
       if (error) {
         done(Error(error))
       }
+
+      expect(result).to.be.an('object')
+      expect(result).to.have.property('body')
+
+      let resultObj = JSON.parse(result.body)
+      expect(resultObj).to.have.property('message')
+      expect(resultObj.message).to.have.property('id')
+      expect(resultObj.message.id).to.be.equal(process.env.TEST_ACCOUNT_ID)
 
       done()
     })
