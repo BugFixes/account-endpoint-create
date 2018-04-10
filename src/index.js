@@ -4,7 +4,7 @@ const Logs = require('bugfixes-account-logging')
 
 const bugfunctions = bugfixes.functions
 
-function lambdaFunction (event, context, callback) {
+module.exports = (event, context, callback) => {
   let eventBody = JSON.parse(event.body)
 
   let log = new Logs()
@@ -34,5 +34,3 @@ function lambdaFunction (event, context, callback) {
     return callback(null, bugfunctions.lambdaResult(100, result))
   })
 }
-
-module.exports = lambdaFunction
