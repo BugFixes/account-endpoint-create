@@ -3,7 +3,7 @@ require('dotenv').config()
 const bugfixes = require('bugfixes')
 const mockyeah = require('mockyeah')
 
-const underTest = require('./index')
+const underTest = require('../src/index')
 
 const expect = require('chai').expect
 

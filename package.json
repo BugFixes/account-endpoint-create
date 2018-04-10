@@ -1,6 +1,6 @@
 {
   "name": "bugfixes-endpoint-create",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "BugFixes Create Endpoint",
   "main": "index.js",
   "author": "keloran <keloran@bugfix.es>",
@@ -8,8 +8,8 @@
   "repository": "git@github.com:BugFixes/account-endpoint-create.git",
   "scripts": {
     "test": "yarn test:standard && yarn test:endpoint",
-    "test:standard": "standard index.js --recursive",
-    "test:endpoint": "mocha test.js --exit",
+    "test:standard": "standard src/index.js index.js",
+    "test:endpoint": "mocha test/test.js --exit",
     "claudia:create": "claudia create --name account-create --region eu-west-2 --runtime nodejs8.10 --handler index.handler",
     "claudia:test": "claudia test-lambda",
     "claudia:deploy": "claudia update --runtime nodejs8.10 "
